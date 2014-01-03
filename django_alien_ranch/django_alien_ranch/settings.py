@@ -10,6 +10,9 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from os.path import join
+from django.core.urlresolvers import reverse_lazy
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -27,6 +30,18 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 
+TEMPLATE_DIRS = (
+    join(BASE_DIR,  'templates'),
+)
+
+# django_registration SETTINGS
+ACCOUNT_ACTIVATION_DAYS = 14
+
+#LOGIN_URL=reverse_lazy('registration_login')
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = reverse_lazy('home')
+LOGOUT_URL=reverse_lazy('logout')
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -36,6 +51,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'registration',
+    'alien_game',
 )
 
 MIDDLEWARE_CLASSES = (
