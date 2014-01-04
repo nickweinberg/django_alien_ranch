@@ -14,6 +14,7 @@
 		<a href="{% url 'profile' slug=user.username %}"><strong>{{ user.username }}</strong></a>
 	{% else %}
 		<a href="{% url 'registration_register' %}">Register</a> |
+		<a href="/accounts/login">Login</a>
 	{% endif %}
 </footer>
 </body>

@@ -30,14 +30,10 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 
-TEMPLATE_DIRS = (
-    join(BASE_DIR,  'templates'),
-)
 
 # django_registration SETTINGS
 ACCOUNT_ACTIVATION_DAYS = 14
 
-#LOGIN_URL=reverse_lazy('registration_login')
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = reverse_lazy('home')
 LOGOUT_URL=reverse_lazy('logout')
@@ -97,3 +93,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+TEMPLATE_DIRS = (
+    join(BASE_DIR,  'templates'),
+)

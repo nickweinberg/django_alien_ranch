@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
+
 from .views import UserProfileDetailView, HomePageView
 admin.autodiscover()
 
@@ -18,5 +19,7 @@ urlpatterns = patterns('',
     # User Profile View
     url(r'^users/(?P<slug>\w+)/$', UserProfileDetailView.as_view(), name='profile'),
 
+    # Game URLS
+    url(r'^game/$', include('alien_game.urls')),
 
 )
