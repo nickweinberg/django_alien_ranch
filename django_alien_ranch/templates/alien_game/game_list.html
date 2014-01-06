@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Game List</h2>
+<div>
+  {% if user.is_authenticated %}
+  <a href="new/"><button>Create a New Game</button></a>
+  {% else %}
+  Login to Create a Game
+  {% endif %}
+</div>
+
+<ul>
+{% for game in object_list %}
+  <li><a href="{% url 'lobby' game.id %}">{{ game.id }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock content %}

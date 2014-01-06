@@ -1,11 +1,6 @@
-
-from django.views.generic import ListView, DetailView, TemplateView, CreateView
+<<<<<<< HEAD
 from django.shortcuts import render, get_object_or_404
 
-from .models import Player, Game, Day
-
-from .forms import GameCreateForm
-from django.contrib.auth.models import User
 from django.utils import simplejson
 from django.http import HttpResponse
 
@@ -15,10 +10,15 @@ from alien_game.models import Chat, ChatMessage
 import datetime
 
 
-
 # This is the first DAY game view (might be able to make both into one with ajax calls and js/css)
 def game_view(request):
 	return render(request, 'game_screen.tmpl')
+
+
+
+
+
+
 
 
 
@@ -132,6 +132,39 @@ def game_chat_ping(request):
 		return HttpResponse(simplejson.dumps(dict_to_send), mimetype='application/javascript')
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======
+from django.views.generic import ListView, DetailView, TemplateView, CreateView
+from django.shortcuts import render
+
+from .models import Player, Game, Day
+from .forms import GameCreateForm
+
+from django.contrib.auth.models import User
+
+
 class GameListView(ListView):
     model = Game
 
@@ -142,3 +175,4 @@ class GameCreateView(CreateView):
 
 class GameLobbyView(DetailView):
     model = Game
+>>>>>>> 709ac4808af303f77f1526bf3c32fc7af38bf40b
