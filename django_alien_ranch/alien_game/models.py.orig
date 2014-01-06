@@ -1,17 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
+<<<<<<< HEAD
 
 # Create your models here.
 
 
-# The chatroom associated with a single game
+
 class Chat(models.Model):
     users = models.ManyToManyField(User,related_name="chats")
 
     def __unicode__(self):
         return "Chat Room"
 
-# A single message saved in the database that is associated with a player and a chat
+
 class ChatMessage(models.Model):
     user = models.ForeignKey(User,related_name="chat_messages", blank=True)
     timestamp = models.DateTimeField(auto_now_add=True) 
@@ -20,8 +21,7 @@ class ChatMessage(models.Model):
 
     def __unicode__(self):
         return "Chat message by " + self.user.username
-
-
+=======
 # Roles for players
 HUMAN_ROLES =   (
                     ('villager', 'Villager'),
@@ -95,9 +95,4 @@ class Day(models.Model):
 
 
 
-class Vote(models.Model):
-    player_voted_at = models.ForeignKey('Player')
-    player_voted_on = models.ForeignKey('Player')
-
-    day = models.ForeignKey('Day', related_name="votes")
-
+>>>>>>> 709ac4808af303f77f1526bf3c32fc7af38bf40b
