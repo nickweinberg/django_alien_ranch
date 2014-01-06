@@ -52,7 +52,6 @@ class Game(models.Model):
     part of the same game.
     """
 
-
     created = models.DateTimeField(auto_now_add=True)
     archive = models.BooleanField(default=False)
 

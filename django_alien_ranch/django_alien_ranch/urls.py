@@ -20,6 +20,6 @@ urlpatterns = patterns('',
     url(r'^users/(?P<slug>\w+)/$', UserProfileDetailView.as_view(), name='profile'),
 
     # Game URLS
-    url(r'^game/$', include('alien_game.urls')),
+    url(r'^game/', include('alien_game.urls')),
 
 )
