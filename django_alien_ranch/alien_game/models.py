@@ -73,3 +73,8 @@ class Day(models.Model):
 
 
 
+class Vote(models.Model):
+    player_voted_at = models.ForeignKey('Player')
+    player_voted_on = models.ForeignKey('Player')
+
+    day = models.ForeignKey('Day', related_name="votes")
