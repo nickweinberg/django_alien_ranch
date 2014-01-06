@@ -4,14 +4,14 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
-
+# The chatroom associated with a single game
 class Chat(models.Model):
     users = models.ManyToManyField(User,related_name="chats")
 
     def __unicode__(self):
         return "Chat Room"
 
-
+# A single message saved in the database that is associated with a player and a chat
 class ChatMessage(models.Model):
     user = models.ForeignKey(User,related_name="chat_messages", blank=True)
     timestamp = models.DateTimeField(auto_now_add=True) 

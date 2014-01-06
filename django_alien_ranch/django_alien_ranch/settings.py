@@ -8,6 +8,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 from os.path import join
@@ -47,12 +49,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
-    'alien_game'
-=======
     'registration',
     'alien_game',
->>>>>>> 709ac4808af303f77f1526bf3c32fc7af38bf40b
 )
 
 MIDDLEWARE_CLASSES = (

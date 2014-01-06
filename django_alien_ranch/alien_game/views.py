@@ -18,7 +18,7 @@ import datetime
 
 # This is the first DAY game view (might be able to make both into one with ajax calls and js/css)
 def game_view(request):
-	return render(request, 'game_screen.tmpl')
+	return render(request, 'alien_game/game_screen.tmpl')
 
 
 
