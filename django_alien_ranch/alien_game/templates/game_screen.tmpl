@@ -1,0 +1,20 @@
+
+{% load staticfiles %}
+
+<html>
+    <head>
+        <title>AlienGame!</title>
+		<script src="{% static 'js/jquery-1.10.2.min.js' %}"></script>
+		<script src="{% static 'js/alien-game.js' %}"></script>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/alien-game.css' %}">
+    </head>
+    <body>
+        <div id="chatbox">
+            <div id="chatbox-in"></div>
+            <div id="chatbox-out-wrapper">
+            	<textarea id="chatbox-out" placeholder="Chat"></textarea>
+            	<button id="chatbox-sendbutton">Send</button>
+            </div>
+        </div>
+    </body>
+</html>
