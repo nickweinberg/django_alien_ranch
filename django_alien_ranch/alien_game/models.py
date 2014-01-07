@@ -1,5 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, UserManager
+
+from django.core.urlresolvers import reverse
 
 # Create your models here.
 
@@ -37,8 +39,6 @@ ALIEN_ROLES =   (
 # Combine them both:
 ROLES = HUMAN_ROLES + ALIEN_ROLES
 
-
-
 # Each player is on a side
 SIDE        =   (
                     ('human', 'Human'),
@@ -61,7 +61,8 @@ class Player(models.Model):
                 ('abducted', 'Abducted')
              )
 
-    game = models.ForeignKey('Game')
+    user = models.ForeignKey('User', related_name='+')
+    game = models.ForeignKey('Game', related_name="players")
     side = models.CharField(max_length=15, choices=SIDE)
     role = models.CharField(max_length=15, choices=ROLES) # go and count out max_length later :P
 
@@ -73,9 +74,13 @@ class Game(models.Model):
     The Game model represents the collection of Players who are all
     part of the same game.
     """
-
     created = models.DateTimeField(auto_now_add=True)
+    has_started = models.BooleanField(default=False)
+
     archive = models.BooleanField(default=False)
+
+    def get_absolute_url(self):
+        return reverse('lobby', kwargs={"pk": self.pk})
 
 
 class Day(models.Model):
@@ -96,8 +101,8 @@ class Day(models.Model):
 
 
 class Vote(models.Model):
-    player_voted_at = models.ForeignKey('Player')
-    player_voted_on = models.ForeignKey('Player')
+    player_voted_at = models.ForeignKey('Player', related_name="voted_at")
+    player_voted = models.ForeignKey('Player', related_name="voted")
 
     day = models.ForeignKey('Day', related_name="votes")
-
+    

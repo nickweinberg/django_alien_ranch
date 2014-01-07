@@ -8,9 +8,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
 
-	#URL for the game view
-    url(r'^game/play/', 'alien_game.views.game_view'),
-
     url(r'^api01/chat/send/', 'alien_game.views.game_chat_send'),
     url(r'^api01/chat/ping/', 'alien_game.views.game_chat_ping'),
 
@@ -29,4 +26,7 @@ urlpatterns = patterns('',
     # Game URLS
     url(r'^game/', include('alien_game.urls')),
 
+
 )
+
+

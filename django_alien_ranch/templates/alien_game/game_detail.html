@@ -3,7 +3,31 @@
 
 {% block content %}
 <div class="container">
-	<div class="row">
+  <div class="row">
+    {% if object.has_started == False %}
+      <div class="col-md-10">
+        <h3>Game Hasn't Started</h3>
+        <small>{% if guest %}{{ guest }}{% endif %}</small>
+        <div class="well well-md">
+          <ul class="list-unstyled">
+          {% if players %}
+            {% for player in object.players %}
+              <li>{{ player.user }}</li>
+            {% endfor %}
+            {% else %}
+              <li>No players yet.</li>
+          {% endif %}
+          </ul>
+          <input type="button" id="join-game-btn" class="btn btn-lg" 
+          onclick="Dajaxice.alien_game.add_player_to_game(
+            callback, {
+              'game_id': {{ object.pk|escapejs }},
+              'user': '{{ guest|escapejs }}'
+           })"
+           value = "JOIN" />
+        </div>
+      </div>
+	{% else %}
 	  <div class="col-md-10">
 		<h1> Day 1</h1>
 	  </div>
@@ -14,50 +38,9 @@
 	  	</div>
 	  </div>
 
-	</div>
-
-	<div class="row">
-	  <div class="col-md-10">
-		<div class="well well-md">
-		  <div class="media">
-		    <img class="media-object pull-left" src="http://www.fillmurray.com/50/50">
-		  <div class="media-body">
-		    <h4 class="media-heading">Steven</h4>
-		    I think that Edgar is an alien because he smells bad!
-		  </div>
-		</div>
-	  </div>
-	  <div class="well well-md">
-		  <div class="media">
-		    <img class="media-object pull-left" src="http://www.fillmurray.com/51/49">
-		  <div class="media-body">
-		    <h4 class="media-heading">Edgar</h4>
-		    :(
-		  </div>
-		</div>
-	  </div>
-	  <div class="well well-md">
-		  <div class="media">
-		    <img class="media-object pull-left" src="http://www.fillmurray.com/49/51">
-		  <div class="media-body">
-		    <h4 class="media-heading">Nick</h4>
-		    This is a trick, you're BOTH aliens!!!
-		  </div>
-		</div>
-	  </div>
-	 </div>
-	  <div class="col-md-2">
-	  	<div class="well well-lg">
-	  	  <div class="">
-		  	  <ul class="list-unstyled">
-		  	    <li>Steven</li>
-		  	    <li>Edgar</li>
-		  	    <li>Nick</li>
-		  	  </ul>
-		  </div>
-	  	</div>
-	  </div>
-	</div>
+    {% endif %}
+  </div>
 </div>
+
 
 {% endblock content %}

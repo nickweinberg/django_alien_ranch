@@ -1,26 +1,17 @@
-
 from django.views.generic import ListView, DetailView, TemplateView, CreateView
 from django.shortcuts import render, get_object_or_404
 
-from .models import Player, Game, Day
+from .models import Player, Game, Day, Chat, ChatMessage
 
 from .forms import GameCreateForm
 from django.contrib.auth.models import User
-from django.utils import simplejson
-from django.http import HttpResponse
 
-# The models for the application
-from alien_game.models import Chat, ChatMessage
+import json
+from django.http import HttpResponse
 
 import datetime
 
-
-
-# This is the first DAY game view (might be able to make both into one with ajax calls and js/css)
-def game_view(request):
-	return render(request, 'alien_game/game_screen.tmpl')
-
-
+from dajaxice.decorators import dajaxice_register
 
 
 # This is the short API call to send messages
@@ -75,8 +66,6 @@ def game_chat_send(request):
 			'params': request.GET,
 		}
 		return HttpResponse(simplejson.dumps(dict_to_send), mimetype='application/javascript')
-
-
 
 # This is the 'ping' api function
 def game_chat_ping(request):
@@ -140,5 +129,30 @@ class GameCreateView(CreateView):
     model = Game
     form_class = GameCreateForm
 
-class GameLobbyView(DetailView):
-    model = Game
+    def form_valid(self, form):
+        f = form.save(commit=False)
+        f.save()
+
+        return super(CreateView, self).form_valid(form)
+
+def GameLobbyView(request, pk):
+    current_game = get_object_or_404(Game, pk=pk)
+    players = current_game.players.all()
+    
+    # dunno why i made it guest
+    guest = request.user
+    data = {
+        'object': current_game,
+        'players': players,
+        'guest': guest 
+        }
+
+
+    return render(request, 'alien_game/game_detail.html', data)
+
+
+
+
+
+
+

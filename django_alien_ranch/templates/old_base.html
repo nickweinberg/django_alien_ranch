@@ -1,5 +1,4 @@
 {% load staticfiles %}
-{% load dajaxice_templatetags %}
 
 <!DOCTYPE html>
 <html>
@@ -26,12 +25,13 @@
 </footer>
 </div>
 
-  <!-- <script src="{% static "js/libs/jquery-1.10.2.js" %}"></script> -->
-  <script src="{% static "js/libs/handlebars-1.1.2.js" %}"></script>
   <script src="{% static "js/libs/jquery-1.10.2.js" %}"></script>
-  {% dajaxice_js_import %}
-  <script src="{% static "/static/dajax/jquery.dajax.core.js" %}"></script>
-  <script src="{% static "js/app.js" %}"></script>
+  <script src="{% static "js/libs/handlebars-1.1.2.js" %}"></script>
+  <script src="{% static "js/libs/ember-1.2.0.js" %}"></script>
+  <script src="{% static "js/libs/ember-data.js" %}"></script>
 
+  <script src="{% static "js/app.js" %}"></script>
+  <script src="{% static "js/router.js" %}"></script>
+  <script src="{% static "js/models/todo.js" %}"></script>
 </body>
 </html>

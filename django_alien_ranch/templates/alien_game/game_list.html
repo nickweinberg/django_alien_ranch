@@ -1,19 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="container">
+<div class="jumbotron">
 <h2>Game List</h2>
-<div>
-  {% if user.is_authenticated %}
-  <a href="new/"><button>Create a New Game</button></a>
-  {% else %}
-  Login to Create a Game
-  {% endif %}
+	<div>
+	  {% if user.is_authenticated %}
+	  <a href="new/"><button class="btn-lg btn-warning">Create a New Game</button></a>
+	  {% else %}
+	  Login to Create a Game
+	  {% endif %}
+	</div>
 </div>
 
-<ul>
+<table class="table table-hover">
+  <thead>
+  	<td>#</td>
+  	<td>Date</td>
+  	<td>Started?</td>
+  </thead>
 {% for game in object_list %}
-  <li><a href="{% url 'lobby' game.id %}">{{ game.id }}</a></li>
+  <tr>
+    <td><a href="{% url 'lobby' game.id %}">{{ game.id }}</a></td>
+    <td>{{ game.created }}</td>
+    <td>{{ game.has_started }}</td>
+  </tr>
 {% endfor %}
-</ul>
-
+</table>
+</div>
 {% endblock content %}
