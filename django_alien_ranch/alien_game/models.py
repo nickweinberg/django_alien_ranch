@@ -58,13 +58,15 @@ class Player(models.Model):
     """
     STATUS = (
                 ('alive', 'Alive'),
-                ('abducted', 'Abducted')
+                ('dead', 'Dead')
              )
 
-    user = models.ForeignKey('User', related_name='+')
-    game = models.ForeignKey('Game', related_name="players")
-    side = models.CharField(max_length=15, choices=SIDE)
-    role = models.CharField(max_length=15, choices=ROLES) # go and count out max_length later :P
+    user = models.ForeignKey(User, related_name='players')
+    game = models.ForeignKey('Game', related_name='players')
+    
+    # Decided at gametime *TOUCHDOWN*
+    side = models.CharField(max_length=15, choices=SIDE, default='human')
+    role = models.CharField(max_length=15, choices=ROLES, default='villager') # go and count out max_length later :P
 
     current_status = models.CharField(max_length=15, choices=STATUS, default='alive')
 
@@ -74,6 +76,7 @@ class Game(models.Model):
     The Game model represents the collection of Players who are all
     part of the same game.
     """
+    users = models.ManyToManyField(User, related_name="games", through="Player")
     created = models.DateTimeField(auto_now_add=True)
     has_started = models.BooleanField(default=False)
 
@@ -95,14 +98,17 @@ class Day(models.Model):
                 ('night', 'Night')
             )
 
+    game          = models.ForeignKey(Game, related_name="days")
+    
     current_day   = models.IntegerField(default=1)
     current_state = models.CharField(max_length=15, choices=STATE)
 
 
 
+
 class Vote(models.Model):
     player_voted_at = models.ForeignKey('Player', related_name="voted_at")
-    player_voted = models.ForeignKey('Player', related_name="voted")
+    player_voted    = models.ForeignKey('Player', related_name="voted")
 
-    day = models.ForeignKey('Day', related_name="votes")
+    day             = models.ForeignKey('Day', related_name="votes")
     

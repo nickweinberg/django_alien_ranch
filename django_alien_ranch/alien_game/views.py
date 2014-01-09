@@ -151,8 +151,17 @@ def GameLobbyView(request, pk):
     return render(request, 'alien_game/game_detail.html', data)
 
 
+def MainGameView(request, pk, current_day):
+    current_game = get_object_or_404(Game, pk=pk)
+    players = current_game.players.all()
+    user = request.user
 
+    object = {
+        'game'   : current_game,
+        'players': players,
+        'user'   : user
 
+    }
 
-
+    return render(request, 'alien_game/game_play.html', object)
 
