@@ -13,6 +13,7 @@ import datetime
 
 from dajaxice.decorators import dajaxice_register
 
+from .game import start_game, morning_vote_round_resolve, night_vote_round_resolve,
 
 # This is the short API call to send messages
 def game_chat_send(request):
@@ -153,13 +154,15 @@ def GameLobbyView(request, pk):
 
 def MainGameView(request, pk, current_day):
     current_game = get_object_or_404(Game, pk=pk)
+    this_day  = get_object_or_404(Day, current_day=current_day)
     players = current_game.players.all()
     user = request.user
 
     object = {
-        'game'   : current_game,
-        'players': players,
-        'user'   : user
+        'game'       : current_game,
+        'players'    : players,
+        'user'       : user,
+        'current_day': this_day
 
     }
 

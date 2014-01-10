@@ -1,7 +1,50 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 
 {% block content %}
-<h3>Placeholder</h3>
+<div class="container">
+	<div class="row">
+	  <div class="col-md-10">
+		<h1>{{ current_day }}</h1>
+		{% if current_day.message %}
+		<div class="well well-md">
+		  <strong>Narrator:</strong><small>{{ current_day.message }}</small>
+		</div>
+		{% endif %}
+		<div class="well well-md">
+		  <small>User comments</small>
+		</div>
+	  </div>
+	  
+	  <div class="col-md-2">
+	    <div class="">
+	    <h3>Player List</h3>
+	      <ul class="list-unstyled">
+	        {% for player in object.players %}
+	        <li>{{ player.user.username }}</li>
+	        {% endfor %}
+	      </ul>
+	  	</div>
+	  </div>
+
+	</div>
+
+	<div class="row">
+	  <div class="col-md-10">
+	  <h3>CHAT BOX</h3>
+	  </div>
+	  <div class="col-md-2">
+	  	<div class="well well-lg">
+	  	  <div class="">
+		  	  <ul class="list-unstyled">
+		  	    <li>Steven</li>
+		  	    <li>Edgar</li>
+		  	    <li>Nick</li>
+		  	  </ul>
+		  </div>
+	  	</div>
+	  </div>
+	</div>
+</div>
 
 {% endblock content %}

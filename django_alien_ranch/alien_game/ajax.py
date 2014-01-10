@@ -35,12 +35,13 @@ def add_player_to_game(request, game_id, user):
     elif Player.objects.filter(game=game).count() == 4:
         add_new_player(request, game_id, user, game)
 
-        game.start_game(game_id)    
+        url = str(game.pk) + '/1' # game id + current day aka 1
+        game.start_game(game)
         return json.dumps(
             {
                 'message': game_id,
                 'user': user,
-                'url': 'test.html' # WE WILL FIX THIS FUCK SHIT LATER
+                'url': url
             }
         )
 
