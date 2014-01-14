@@ -1,7 +1,17 @@
-Here's the question everyone's been asking.
+A basic 'mafia' game using Django.
 
-Did you really think you could win? Did you really think you have what it takes to defeat me? I know that in the last millenia or so there's been several people who have tried but not since then they've given up, they knew it was a joke.
+Completed:
+	Day/Night Cycles
+	Sides
+	Voting
 
-They had no chance and neither do you, you're like an ice cream cone on the top of the leaning tower of pisa, dripping all the way to the floor like a lost chalkboard in the dump. Hah!
+Working on:
+	Adding REST API
+	Ember.js
+	SLICK SMOOTH UI
+	More roles besides just vanilla
+	FAQ
+	Graphics
+	Sound Effects
+	CHAT!!!
 
-*written in vim*
