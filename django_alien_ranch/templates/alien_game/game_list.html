@@ -17,12 +17,22 @@
   <thead>
   	<td>#</td>
   	<td>Date</td>
+    <td>Players</td>
   	<td>Started?</td>
   </thead>
 {% for game in object_list %}
   <tr>
     <td><a href="{% url 'lobby' game.id %}">{{ game.id }}</a></td>
     <td>{{ game.created }}</td>
+    <td>
+      <ul class="list-unstyled">
+        {% for player in game.players.all %}
+        <li>
+        {{ player.user.username }}
+        {% endfor %}
+        </li>
+      </ul>
+    </td>
     <td>{{ game.has_started }}</td>
   </tr>
 {% endfor %}

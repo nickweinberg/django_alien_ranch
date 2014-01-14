@@ -1,12 +1,14 @@
 from django.test import TestCase
 from alien_game.models import Day, Player, Game, Vote
 from django.contrib.auth.models import User, UserManager
-from .game import start_game
+from .game import start_game, morning_vote_round_resolve, night_vote_round_resolve
 from django.db.models import Count
 
 from random import randint, choice
 
 from django.shortcuts import get_object_or_404
+
+# GOTTA WRITE REAL TESTS
 
 class FunTestCase(TestCase):
     def setUp(self):
@@ -25,10 +27,8 @@ class FunTestCase(TestCase):
         game      = Game.objects.get(pk=1)
 
 
-
-
-
-    def test_game_logic(self):
+    # not running this one atm
+    def woah_test_game_logic(self):
         """test run through of entire game logic."""
         user_list = User.objects.all()
         game      = Game.objects.get(pk=1)
@@ -132,8 +132,74 @@ class FunTestCase(TestCase):
 
         print another_day.message
 
+    def test_full_run_through(self):
+        
+        # get 5 users and game
+        user_list = User.objects.filter(pk__in=[1,2,3,4,5])
+        game      = Game.objects.get(pk=1)
+
+        for user in user_list:
+            new_player = Player(user=user, game=game)
+            new_player.save()
+            if Player.objects.filter(game=game).count() == 5:
+                start_game(game)
+
+        # Assert that players list has 5 people
+        players_list = game.players.all()
+        self.assertEqual(players_list.count(), 5)
+
+        # Assert that game has one day Day 1
+        self.assertEqual(game.days.count(), 1)
+
+        # Assert that current game day is 1
+        self.assertEqual(game.days.all()[0].current_day, 1)
+        self.assertEqual(game.days.all()[0].current_state, 'morning')
+
+        # Assert that there is one alien and 4 players
+        self.assertEqual(game.get_alive_alien_count(), 1)
+        self.assertEqual(game.get_alive_human_count(), 4)
+
+        # go through an each player makes a vote
+        # checks each time if everyone voted
+        d1 = Day.objects.get(game=game, current_day=1)
+
+        for player in players_list:
+            new_vote = Vote(player_voted=player, player_voted_at=choice(players_list), day=d1)
+            new_vote.save()
+            if d1.did_everyone_vote_day():
+                morning_vote_round_resolve(game, d1)
+
+        # assert that everyone did vote
+        self.assertEqual(d1.did_everyone_vote_day(), True)
+        self.assertEqual(d1.current_state, 'night')
+
+        
+        alien_list = game.get_alive_aliens()
+        # curious about abducted players
+        dead_players = Player.objects.filter(game=game, current_status='dead')
+        for dead_guy in dead_players:
+            print dead_guy.user, 'is dead.'
+
+        # assert that aliens > 0
+        self.assertTrue(len(alien_list) > 0)
+
+        # assert that we have one dead guy
+        self.assertTrue(len(dead_players) == 1)
+
+        for alien in alien_list:
+            new_vote = Vote(player_voted=alien, player_voted_at=choice(players_list), day=d1)
+            new_vote.save()
+            if d1.did_everyone_vote_night():
+                night_vote_round_resolve(game, d1)
 
 
+        self.assertEqual(Vote.objects.filter(day=d1, vote_time='night').count(), 1)
+    
+        # assert latest day is Day 2
+        self.assertEqual(game.latest_day().current_day, 2)
+
+        d2 = game.latest_day()
+        print d2.message
         
 
 

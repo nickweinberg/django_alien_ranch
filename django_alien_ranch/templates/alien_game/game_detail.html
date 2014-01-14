@@ -29,7 +29,15 @@
       </div>
 	{% else %}
 	  <div class="col-md-10">
-		<h1> Day 1</h1>
+		  <h1> Game has started</h1>
+      {% for day in object.days.all %}
+      <div class="well well-md">
+        <a href="{% url 'play' object.pk day.current_day %}">Day {{day.current_day}} Events Recap:</a>
+      </div>
+      {% endfor %}
+      <div class="well well-md">
+        <a href="{% url 'play' object.pk newest_day %}">We Are On Day {{newest_day}}</a>
+      </div>
 	  </div>
 	  
 	  <div class="col-md-2">

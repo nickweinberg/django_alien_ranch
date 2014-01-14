@@ -100,19 +100,25 @@ class Game(models.Model):
     def get_alive_humans(self):
         return self.players.filter(current_status='alive', side='human')
 
+    def get_alive_human_count(self):
+        return self.players.filter(current_status='alive', side='human').count()
+
     def check_game_over(self):
         if self.get_alive_alien_count() == 0:
             self.winner = SIDE[0][0]
             self.archive = True
             self.save()
             return True
-        elif self.get_alive_alien_count() >= self.get_alive_humans.count():
+        elif self.get_alive_alien_count() >= self.get_alive_human_count():
             self.winner = SIDE[1][0]
             self.archive = True
             self.save()
             return True
         # game isn't over
         return False
+
+    def latest_day(self):
+        return self.days.latest('current_day')
 
 
 
@@ -128,6 +134,7 @@ class Day(models.Model):
                 ('night', 'Night')
             )
 
+
     game          = models.ForeignKey(Game, related_name="days")
     message       = models.TextField(max_length=200)
     current_day   = models.IntegerField(default=1) # Maybe this should be day_of_game to be more clear
@@ -138,13 +145,16 @@ class Day(models.Model):
         self.save()
 
     def did_everyone_vote_day(self):
-        if self.votes.count() == self.game.get_alive_player_count():
+        if self.votes.count() >= self.game.get_alive_player_count():
             return True
         else:
             return False
 
     def did_everyone_vote_night(self):
-        return self.game.get_alive_alien_count() <= self.votes.filter(vote_time='night').count()
+        if self.votes.filter(vote_time='night').count() >= self.game.get_alive_alien_count():
+            return True
+        else:
+            return False
 
     def set_day_message(self):
         # Not using this right now
@@ -176,7 +186,7 @@ class Day(models.Model):
             is_no_ties = True
             # this gives ValueError: max() arg is an empty sequence if there are no aliens
             # but game should be over in that case!!
-            player_to_be_killed = Player.objects.get(user__username=(max(vote_counter, key=vote_counter.get)))
+            player_to_be_killed = Player.objects.get(user__username=(max(vote_counter, key=vote_counter.get)), game=self.game)
     
         return is_no_ties, player_to_be_killed
 
@@ -207,5 +217,11 @@ class Vote(models.Model):
 
     day             = models.ForeignKey('Day', related_name="votes")
 
+    def save(self, *args, **kwargs):
+        # CHECK IF PLAYER_VOTED EXISTS
+        if not self.day.votes.filter(player_voted=self.player_voted, vote_time=self.day.current_state).exists():
 
+            # correctly sets vote_time
+            self.vote_time=self.day.current_state
+            super(Vote, self).save(*args, **kwargs) # Call the "real" save() method.
     

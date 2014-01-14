@@ -5,25 +5,12 @@
 <div class="container">
 	<div class="row">
 	  <div class="col-md-10">
-		<h1>{{ current_day }}</h1>
-		{% if current_day.message %}
-		<div class="well well-md">
-		  <strong>Narrator:</strong><small>{{ current_day.message }}</small>
-		</div>
-		{% endif %}
-		<div class="well well-md">
-		  <small>User comments</small>
-		</div>
+		<h1>Day {{ current_day.current_day }}</h1>
 	  </div>
 	  
 	  <div class="col-md-2">
 	    <div class="">
-	    <h3>Player List</h3>
-	      <ul class="list-unstyled">
-	        {% for player in object.players %}
-	        <li>{{ player.user.username }}</li>
-	        {% endfor %}
-	      </ul>
+	     
 	  	</div>
 	  </div>
 
@@ -31,18 +18,49 @@
 
 	<div class="row">
 	  <div class="col-md-10">
-	  <h3>CHAT BOX</h3>
+	    {% if current_day.message %}
+		<div class="well well-md">
+		  <strong>Narrator:</strong><small>{{ current_day.message }}</small>
+		</div>
+		{% endif %}
+		<div class="well well-md">
+		  Test chatter
+		</div>
 	  </div>
 	  <div class="col-md-2">
-	  	<div class="well well-lg">
+
+	    <h3>Vote Box</h3>
+	    <div>
+	    {% if current_day.votes.all.count >= 5 %}
+	      <strong>VOTING SHOULD BE OVER</strong>
+	    {% else %}
+	      <strong>People still gotta vote</strong>
+	    {% endif %}
+	    </div>
+	  	<form action="{% url 'play' game.pk current_day.current_day %}" method="post">{% csrf_token %}
+			<select name="select" class="form-control">
+			  {% for player in players %}
+			  <option value="{{ player.user.username }}">{{ player.user.username }}</option> 
+			  {% endfor %}
+			</select>
+		  	<p>
+		  	  <input class="btn btn-primary" type="submit" value="Submit" />
+		  	</p>
+		</form>
+		<h3>Player List</h3>
+
+	  	<div class="well well-md">
+
 	  	  <div class="">
-		  	  <ul class="list-unstyled">
-		  	    <li>Steven</li>
-		  	    <li>Edgar</li>
-		  	    <li>Nick</li>
-		  	  </ul>
+		      <ul class="list-unstyled">
+		        {% for player in players %}
+		        <li>{{ player.user.username }}</li> 
+		        {% endfor %}
+		      </ul>
 		  </div>
 	  	</div>
+
+
 	  </div>
 	</div>
 </div>

@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/$', GameLobbyView, name='lobby'),
     # dajaxice URLS
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
-
+    
     url(r'^(?P<pk>\d+)/(?P<current_day>\d+)/$', MainGameView, name='play')
 
 ) 

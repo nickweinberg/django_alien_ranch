@@ -1,9 +1,9 @@
 from django.views.generic import ListView, DetailView, TemplateView, CreateView
 from django.shortcuts import render, get_object_or_404
 
-from .models import Player, Game, Day, Chat, ChatMessage
+from .models import Player, Game, Day, Chat, ChatMessage, Vote
 
-from .forms import GameCreateForm
+from .forms import GameCreateForm, GameVoteForm
 from django.contrib.auth.models import User
 
 import json
@@ -13,7 +13,7 @@ import datetime
 
 from dajaxice.decorators import dajaxice_register
 
-from .game import start_game, morning_vote_round_resolve, night_vote_round_resolve,
+from .game import start_game, morning_vote_round_resolve, night_vote_round_resolve
 
 # This is the short API call to send messages
 def game_chat_send(request):
@@ -139,10 +139,12 @@ class GameCreateView(CreateView):
 def GameLobbyView(request, pk):
     current_game = get_object_or_404(Game, pk=pk)
     players = current_game.players.all()
+    newest_day = Day.objects.filter(game=current_game).order_by('-current_day')[0]
     
     # dunno why i made it guest
     guest = request.user
     data = {
+        'newest_day': newest_day.current_day,
         'object': current_game,
         'players': players,
         'guest': guest 
@@ -154,9 +156,32 @@ def GameLobbyView(request, pk):
 
 def MainGameView(request, pk, current_day):
     current_game = get_object_or_404(Game, pk=pk)
-    this_day  = get_object_or_404(Day, current_day=current_day)
+    this_day  = get_object_or_404(Day, current_day=current_day, game=current_game)
     players = current_game.players.all()
     user = request.user
+    
+    if request.method == 'POST': # If the form has been submitted...
+
+        voted_at        = request.POST[u'select']
+        player_voted_at = Player.objects.get(user__username=voted_at, game=current_game)
+        player_voted    = Player.objects.get(user=user, game=current_game)
+
+        # cant let them vote more than once just gonna super save
+
+        new_vote = Vote(player_voted=player_voted, player_voted_at=player_voted_at, day=this_day)
+        new_vote.save()
+
+        # So maybe add this logic to the save function
+        if this_day.current_state == 'morning':
+            if this_day.did_everyone_vote_day():
+                morning_vote_round_resolve(current_game, this_day)
+        elif this_day.current_state == 'night':
+            if this_day.did_everyone_vote_night():
+                night_vote_round_resolve(current_game, this_day)
+
+
+    # to clear out the button MAYBE ILL DO THIS LATER
+    # self.day.votes.filter(player_voted=self.player_voted, vote_time=self.day.current_state).exists()
 
     object = {
         'game'       : current_game,

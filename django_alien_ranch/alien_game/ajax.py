@@ -5,11 +5,12 @@ from django.shortcuts import get_object_or_404
 from dajaxice.decorators import dajaxice_register
 from dajax.core import Dajax
 
-import game
+from game import start_game
 
 def add_new_player(request, game_id, user, game):
     new_player = Player(user=request.user, game=game)
     new_player.save()
+    return True
 
 
 @dajaxice_register
@@ -34,9 +35,10 @@ def add_player_to_game(request, game_id, user):
         )
     elif Player.objects.filter(game=game).count() == 4:
         add_new_player(request, game_id, user, game)
-
+        print 'gonna start the game'
+        start_game(game)
+        
         url = str(game.pk) + '/1' # game id + current day aka 1
-        game.start_game(game)
         return json.dumps(
             {
                 'message': game_id,
@@ -47,6 +49,7 @@ def add_player_to_game(request, game_id, user):
 
 
     else:
+        print 'durp'
         add_new_player(request, game_id, user, game)
         return json.dumps(
             {
