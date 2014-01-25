@@ -13,5 +13,5 @@ Working on:
 	FAQ
 	Graphics
 	Sound Effects
-	CHAT!!!
+	CHAT!
 
