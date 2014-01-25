@@ -6,13 +6,21 @@ Completed:
 	Voting
 
 Working on:
-Adding REST API\n
-Ember.js\n
-SLICK SMOOTH UI\n
-More roles besides just vanilla\n
-FAQ\n
-Graphics\n
-Sound Effects\n
-CHAT!\n
+Adding REST API
+
+Ember.js
+
+SLICK SMOOTH UI
+
+More roles besides just vanilla
+
+FAQ
+
+Graphics
+
+Sound Effects
+
+CHAT!
+
 
 
